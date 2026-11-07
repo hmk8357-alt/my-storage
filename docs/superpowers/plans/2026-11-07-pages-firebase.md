@@ -23,9 +23,9 @@ Account changes during pending requests must not restore another user's text. In
 - [x] Test diary validation and session isolation with Node, observe failures, implement validation and a guarded request adapter.
 - [x] Reuse only the existing public diary assets; replace HTTP API with Firebase adapter, add Google login/logout and account clearing, add static hub launcher and privacy information.
 - [x] Add Firestore rules and negative access/schema tests; validate against emulator when tooling is available.
-- [ ] Build an allowlisted static distribution, scan staged public source for credentials and private data, run tests and preview browser flows. Build and scan pass; browser verification pending Pages because in-app browser cannot reach host localhost.
+- [x] Build an allowlisted static distribution, scan staged public source for credentials and private data, run tests and preview browser flows. Public assets verified after Pages deployment because in-app browser could not reach host localhost.
 - [x] Create Firebase project, enable Google Auth, configure authorized domains and deploy rules using the authenticated user's account.
-- [ ] Create GitHub repository, upload reviewed source, enable Pages and verify public deployment plus live auth and CRUD.
+- [x] Use user's GitHub repository, upload reviewed source, enable Pages and verify public deployment plus live auth, create/update/reload/logout. Test document cleanup verified; delete authorization tested in emulator. Real-account backup restore and second-Google-account checks remain unperformed and are documented.
 
 ## Execution notes
 

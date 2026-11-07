@@ -2,6 +2,10 @@
 
 GitHub Pages용 정적 허브 시작 화면과 Firebase Google 로그인 기반 개인 일기장입니다. 기존 Apps Script 교사용 도구는 `public/hub-config.js`에 실제 `/exec` 주소를 넣으면 연결됩니다. 아직 주소를 설정하지 않아 준비 중으로 표시됩니다.
 
+- 허브: https://hmk8357-alt.github.io/my-storage/
+- 일기장: https://hmk8357-alt.github.io/my-storage/diary/
+- 2026-11-07 Pages 배포, 실제 Google 로그인·저장·수정·새로고침 재조회·로그아웃 확인 완료. 검증용 기록은 정리했습니다.
+
 ## 로컬 실행
 
 Node.js 24 이상에서 별도 앱 의존성 설치 없이 실행합니다.
@@ -20,6 +24,8 @@ node scripts/preview.js
 
 데이터 경로는 `users/{uid}/entries/{entryId}`입니다. Google 로그인 계정 본인만 일기를 읽고 쓸 수 있도록 규칙을 구성했습니다. 실제 프로젝트의 Google 제공자·허용 도메인·데이터베이스 생성·규칙 배포 상태는 `docs/prepublish-review.md`를 확인하세요.
 
+현재 기본 데이터베이스는 서울(`asia-northeast3`) Standard이며 무료 할당량 대상입니다. 결제 계정을 연결하지 않았습니다. 무료 할당량은 서비스의 무제한 사용을 의미하지 않습니다.
+
 공유 컴퓨터에 일기 원문이 지속적으로 남지 않도록 Firestore 캐시는 메모리만 사용하고, 인증은 브라우저 세션 범위로 유지합니다. 일기 원문은 Firebase로 전송됩니다. 종단간 암호화는 제공하지 않습니다.
 
 ## 백업
@@ -29,6 +35,8 @@ node scripts/preview.js
 ## Pages
 
 GitHub 저장소의 Pages 설정에서 GitHub Actions를 배포 소스로 선택합니다. `main` 브랜치에 업로드하면 `.github/workflows/pages.yml`이 테스트·빌드 후 `dist/`를 배포합니다. 일기장 Google 로그인을 위해 실제 Pages 도메인을 Firebase의 허용 도메인으로 등록해야 합니다.
+
+현재 저장소는 GitHub Actions 소스로 설정됐고 실제 Pages 도메인은 Firebase에 등록되어 있습니다.
 
 ## 공개 범위와 개인정보
 
