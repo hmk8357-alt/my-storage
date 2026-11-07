@@ -1,0 +1,6 @@
+{
+  "name": "teacher-webapp-hub",
+  "private": true,
+  "type": "module",
+  "scripts": {"test": "node --test tests/domain.test.js", "test:rules": "node --test tests/firestore.rules.test.js", "build": "node scripts/build.js", "preview": "node scripts/preview.js"}
+}

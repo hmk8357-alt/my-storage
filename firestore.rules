@@ -1,0 +1,36 @@
+rules_version = '2';
+// Model: users/{uid}/entries/{id}. No public user profiles or parent records.
+// Entries: title/content/date/mood/tags/favorite + ISO display timestamps + server savedAt.
+// createdAt is preserved during backup restore and immutable on updates.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid
+        && request.auth.token.firebase.sign_in_provider == 'google.com';
+    }
+    function validTag(tags, index) {
+      return tags.size() <= index || (tags[index] is string && tags[index].size() > 0 && tags[index].size() <= 30);
+    }
+    function validEntry(d) {
+      return d.keys().hasAll(['title','content','date','mood','tags','favorite','createdAt','updatedAt','savedAt'])
+        && d.keys().hasOnly(['title','content','date','mood','tags','favorite','createdAt','updatedAt','savedAt'])
+        && d.title is string && d.title.size() > 0 && d.title.size() <= 120
+        && d.content is string && d.content.size() > 0 && d.content.size() <= 100000
+        && d.date is string && d.date.size() == 10 && d.date.matches('[0-9]{4}-[0-9]{2}-[0-9]{2}')
+        && d.mood is string && d.mood in ['great','good','calm','sad','tired']
+        && d.favorite is bool && d.tags is list && d.tags.size() <= 10
+        && validTag(d.tags,0) && validTag(d.tags,1) && validTag(d.tags,2) && validTag(d.tags,3) && validTag(d.tags,4)
+        && validTag(d.tags,5) && validTag(d.tags,6) && validTag(d.tags,7) && validTag(d.tags,8) && validTag(d.tags,9)
+        && d.createdAt is string && d.createdAt.size() == 24 && d.createdAt.matches('[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}[.][0-9]{3}Z')
+        && d.updatedAt is string && d.updatedAt.size() == 24 && d.updatedAt.matches('[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}[.][0-9]{3}Z')
+        && d.savedAt is timestamp && d.savedAt == request.time;
+    }
+    match /users/{uid}/entries/{id} {
+      allow read, delete: if isOwner(uid);
+      allow create: if isOwner(uid) && id.matches('[a-zA-Z0-9-]{1,100}') && validEntry(request.resource.data);
+      allow update: if isOwner(uid) && validEntry(request.resource.data)
+        && request.resource.data.createdAt == resource.data.createdAt;
+    }
+    match /{document=**} {allow read, write: if false;}
+  }
+}

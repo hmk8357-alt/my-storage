@@ -1,0 +1,15 @@
+node_modules/
+.tools/
+dist/
+data/
+private/
+.env*
+!.env.example
+*.sqlite*
+*backup*.json
+*service-account*.json
+*client_secret*.json
+.firebase/
+*-debug.log
+.clasprc*.json
+.clasp.json

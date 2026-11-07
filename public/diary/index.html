@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f7f2"><meta name="description" content="오롯이 나를 위한 일기장. 오늘의 작은 순간과 마음을 기록하세요.">
+  <title>오늘의 조각 — 나만의 일기장</title>
+  <meta name="referrer" content="no-referrer">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="./styles.css"><script type="module" src="./app.js"></script>
+</head>
+<body>
+<section id="auth-panel" class="auth-panel" aria-labelledby="auth-title">
+  <a href="../">← 교사 도구함</a><p class="eyebrow">A LITTLE PIECE OF TODAY</p>
+  <h1 id="auth-title">오늘의 조각</h1><p>어디서든 이어 쓰는, 나만의 하루.</p>
+  <p id="auth-message" role="status">클라우드 연결을 확인하고 있어요…</p>
+  <button id="google-login" class="button primary" disabled>Google로 로그인</button>
+  <p><a href="../privacy.html">개인정보와 데이터 보관 안내</a></p>
+</section>
+<div id="account-bar" class="account-bar" hidden><a href="../">← 교사 도구함</a><span id="account-name"></span><button id="logout" class="button">로그아웃</button></div>
+<svg class="svg-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+  <symbol id="leaf" viewBox="0 0 24 24"><path d="M12 21V10m0 5C4 16 3 7 3 7s9-1 9 8Zm0-5C12 3 21 3 21 3s1 8-9 7Z"/></symbol>
+  <symbol id="book" viewBox="0 0 24 24"><path d="M4 4h7a3 3 0 0 1 3 3v14a4 4 0 0 0-4-2H4Zm16 0h-3a3 3 0 0 0-3 3m0 14a4 4 0 0 1 4-2h2V4M7 8h3m-3 4h3"/></symbol>
+  <symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></symbol>
+  <symbol id="star" viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9Z"/></symbol>
+  <symbol id="calendar" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4m8-4v4M4 11h16m-12 4h2m4 0h2m-8 3h2"/></symbol>
+  <symbol id="left" viewBox="0 0 24 24"><path d="m14 6-6 6 6 6"/></symbol>
+  <symbol id="right" viewBox="0 0 24 24"><path d="m10 6 6 6-6 6"/></symbol>
+  <symbol id="download" viewBox="0 0 24 24"><path d="M12 3v12m-4-4 4 4 4-4M4 16v4h16v-4"/></symbol>
+  <symbol id="upload" viewBox="0 0 24 24"><path d="M12 16V4m-4 4 4-4 4 4M4 16v4h16v-4"/></symbol>
+  <symbol id="check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+  <symbol id="lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"/></symbol>
+  <symbol id="close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+  <symbol id="trash" viewBox="0 0 24 24"><path d="M3 6h18M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7"/></symbol>
+  <symbol id="pen" viewBox="0 0 24 24"><path d="m15 4 5 5M4 20l5-1L21 7l-5-5L4 14Zm0 0 5-1-4-4"/></symbol>
+  <symbol id="grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></symbol>
+  <symbol id="back" viewBox="0 0 24 24"><path d="M20 12H4m6-6-6 6 6 6"/></symbol>
+</defs></svg>
+<div class="app-shell" hidden inert>
+  <aside class="sidebar" aria-label="일기장 메뉴">
+    <a class="brand" href="../" aria-label="교사 도구함으로"><span class="brand-mark"><svg class="icon"><use href="#leaf"/></svg></span><span>오늘의 조각<small>A LITTLE PIECE OF TODAY</small></span></a>
+    <button id="new-entry" class="button primary new-entry"><svg class="icon"><use href="#plus"/></svg>새 일기 쓰기<span class="key-hint">N</span></button>
+    <p class="nav-caption">나의 공간</p>
+    <nav class="navigation">
+      <button id="nav-all" class="nav-item active" aria-current="page"><svg class="icon"><use href="#book"/></svg>모든 일기<span id="all-count" class="nav-count">0</span></button>
+      <button id="nav-favorites" class="nav-item"><svg class="icon"><use href="#star"/></svg>소중한 일기<span id="favorite-count" class="nav-count">0</span></button>
+      <button id="nav-today" class="nav-item"><svg class="icon"><use href="#calendar"/></svg>오늘의 기록</button>
+    </nav>
+    <section class="calendar-section" aria-label="날짜별 일기">
+      <div class="calendar-top"><h2 id="calendar-title"></h2><div><button id="prev-month" class="icon-button" aria-label="이전 달"><svg class="icon"><use href="#left"/></svg></button><button id="next-month" class="icon-button" aria-label="다음 달"><svg class="icon"><use href="#right"/></svg></button></div></div>
+      <div class="weekdays" aria-hidden="true"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+      <div id="calendar-grid" class="calendar-grid"></div>
+      <p class="calendar-legend"><span></span>일기를 쓴 날</p>
+    </section>
+    <div class="sidebar-note"><svg class="icon"><use href="#leaf"/></svg><p>평범한 하루도<br>모이면 특별한 이야기가 돼요.</p><span>YOUR DAYS, YOUR STORY.</span></div>
+    <div class="sidebar-bottom"><button id="open-backup" class="backup-button"><svg class="icon"><use href="#download"/></svg>백업 및 복원<svg class="icon small"><use href="#right"/></svg></button><div class="local-caption"><span class="status-dot"></span>내 계정의 클라우드에 기록</div></div>
+  </aside>
+  <main class="main">
+    <header class="page-header"><div><div class="eyebrow">MY PERSONAL JOURNAL</div><h1>나의 일기장<span class="heading-dot">.</span></h1><p>흘러가는 하루에, 나만의 의미를 더해요.</p></div><div class="header-right"><span class="today-label" id="today-label"></span><span class="local-badge"><svg class="icon small"><use href="#lock"/></svg>나의 비공개 공간</span></div></header>
+    <div class="workspace">
+      <section class="entries-panel" aria-label="일기 목록">
+        <div class="list-top"><div class="list-title"><h2 id="list-title">모든 일기</h2><span id="list-count">0편</span></div><button id="sort-order" class="text-button" aria-label="정렬 순서 변경">최신순 ↓</button></div>
+        <label class="search-box"><svg class="icon"><use href="#search"/></svg><input id="search" type="search" placeholder="기억하고 싶은 순간 검색" aria-label="일기 제목, 내용, 태그 검색"></label>
+        <div class="list-filters"><span>마음 모아보기</span><select id="mood-filter" aria-label="기분으로 필터"><option value="">모든 기분</option value="great">행복해요</option value="good">좋아요</option value="calm">평온해요</option value="sad">속상해요</option value="tired">지쳤어요</option></select></div>
+        <button id="clear-date" class="date-filter" hidden><svg class="icon small"><use href="#calendar"/></svg><span></span><svg class="icon small"><use href="#close"/></svg></button>
+        <div id="entries-list" class="entries-list" aria-live="polite"><p class="loading">기록을 불러오는 중이에요…</p></div>
+        <div class="list-footer"><svg class="icon small"><use href="#leaf"/></svg><span id="list-footer-text">오늘의 작은 조각을 남겨보세요.</span></div>
+      </section>
+      <section class="editor-panel" aria-label="일기 작성">
+        <div class="editor-toolbar"><div class="editor-toolbar-start"><button id="back-to-list" class="icon-button mobile-only" aria-label="일기 목록으로"><svg class="icon"><use href="#back"/></svg></button><span class="editor-label"><svg class="icon small"><use href="#pen"/></svg><span id="editor-label">새로운 하루의 기록</span></span></div><div class="editor-actions"><span id="save-state" role="status">나만 볼 수 있어요</span><button id="favorite-entry" class="icon-button" aria-label="소중한 일기로 표시" aria-pressed="false"><svg class="icon"><use href="#star"/></svg></button><button id="delete-entry" class="icon-button danger" aria-label="일기 삭제" hidden><svg class="icon"><use href="#trash"/></svg></button></div></div>
+        <form id="entry-form" class="entry-form">
+          <div class="paper">
+            <label class="entry-date"><svg class="icon small"><use href="#calendar"/></svg><input id="entry-date" type="date" required aria-label="일기 날짜"><span id="entry-weekday"></span></label>
+            <input id="entry-title" class="entry-title" maxlength="120" placeholder="오늘은 어떤 하루였나요?" aria-label="일기 제목" autocomplete="off">
+            <div class="mood-section"><span class="field-caption">오늘의 마음</span><div id="mood-picker" class="mood-picker" role="group" aria-label="오늘의 기분"></div></div>
+            <div class="writing-area"><label for="entry-content" class="sr-only">일기 내용</label><textarea id="entry-content" maxlength="100000" placeholder="마음에 남은 순간, 스쳐 간 생각…&#10;어떤 이야기든 괜찮아요. 편하게 적어보세요." required></textarea></div>
+            <div class="tags-row"><span class="tag-symbol">#</span><label for="entry-tags" class="sr-only">태그, 쉼표로 구분</label><input id="entry-tags" placeholder="태그 추가 (쉼표로 구분)" autocomplete="off" maxlength="319"><span class="tag-hint">최대 10개</span></div>
+          </div>
+          <div class="editor-bottom"><div><span id="character-count">0자</span><span class="save-hint">차곡차곡, 나를 알아가는 시간</span></div><button type="submit" id="save-entry" class="button primary"><svg class="icon small"><use href="#check"/></svg>일기 저장하기</button></div>
+        </form>
+      </section>
+    </div>
+    <footer class="page-footer"><span>오늘의 조각 <span class="footer-divider">/</span> 오롯이 나를 위한 기록</span><span>작은 기록이 쌓여, 내가 됩니다.</span></footer>
+  </main>
+</div>
+<dialog id="backup-dialog" class="modal"><div class="modal-heading"><span class="eyebrow">KEEP YOUR MEMORIES</span><button id="close-backup" class="icon-button" aria-label="닫기"><svg class="icon"><use href="#close"/></svg></button></div><h2>소중한 기억, 오래도록.</h2><p>일기를 파일로 보관하고, 언제든 다시 불러오세요.</p><div class="storage-info"><svg class="icon"><use href="#lock"/></svg><div><strong>로그인한 계정의 Firebase에 저장돼요</strong><span>일기 원문이 Google 클라우드로 전송돼요. 한 번에 최대 200편 복원.</span></div></div><button id="export-backup" class="backup-option"><svg class="icon"><use href="#download"/></svg><span><strong>백업 파일 내려받기</strong><small>모든 일기를 JSON 파일로 저장해요.</small></span><svg class="icon"><use href="#right"/></svg></button><button id="import-backup" class="backup-option"><svg class="icon"><use href="#upload"/></svg><span><strong>백업 파일 불러오기</strong><small>기존 일기는 유지하고, 새 기록만 추가해요.</small></span><svg class="icon"><use href="#right"/></svg></button><div id="backup-parts" aria-live="polite"></div><input id="backup-file" type="file" accept="application/json,.json" hidden><p class="modal-note">백업 파일에는 일기 원문이 들어 있어요.<br>다른 사람이 접근하지 않는 곳에 보관해 주세요.</p></dialog>
+<div id="toast" class="toast" role="status" hidden></div>
+</body></html>
